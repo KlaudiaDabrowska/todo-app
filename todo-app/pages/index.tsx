@@ -54,13 +54,23 @@ const Home: NextPage = () => {
       produce((draft) => {
         const index = draft.findIndex((item) => item.id === itemId);
         draft[index].isDone = done;
-        console.log("set done ", itemId, done);
       })
     );
   };
 
   const handleChangeCheckbox = (id: number, done: boolean) => () =>
     setDone(id, done);
+
+  const deleteCheckedTodo = (itemId: number) => {
+    setListToDo(
+      produce((draft) => {
+        const index = listToDo.findIndex((todo) => todo.id === itemId);
+        draft.splice(index, 1);
+      })
+    );
+  };
+
+  const handleDeleteTodo = (id: number) => () => deleteCheckedTodo(id);
 
   return (
     <div className={styles.container}>
@@ -118,6 +128,7 @@ const Home: NextPage = () => {
                   </ListItemIcon>
                   <ListItemText primary={`${todo.description}`} />
                 </ListItemButton>
+                <Button onClick={handleDeleteTodo(todo.id)}>Delete</Button>
               </ListItem>
             ))}
           </List>
